@@ -48,3 +48,9 @@ This framework establishes the foundation for **pixel-to-GPS georeferencing of d
 - **Scalability & Interoperability** – Develop APIs that seamlessly connect this toolkit with existing GIS platforms, disaster dashboards, and humanitarian coordination systems (e.g., UN OCHA, Red Cross).  
 
 The long-term vision is a **fully autonomous, multi-drone situational awareness system** where object detections become georeferenced intelligence within seconds, **saving lives by directing responders to the right place at the right time**. 
+
+ https://github.com/user-attachments/assets/6108d663-d256-41a1-836f-30a3b3230d1f
+
+
+
+
