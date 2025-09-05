@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Document><name>Blantyre1.JPG</name>
+<Placemark><name>main_coordinate</name><description><![CDATA[Original image GPS]]></description><Point><coordinates>35.02807156,-15.83321261,0</coordinates></Point></Placemark>
+<Placemark><name>det_1</name><description><![CDATA[id=1, u=606, v=253, dE=19.236m, dN=1.717m]]></description><Point><coordinates>35.02878715,-15.83296328,0</coordinates></Point></Placemark>
+<Placemark><name>det_2</name><description><![CDATA[id=2, u=596, v=207, dE=27.583m, dN=5.883m]]></description><Point><coordinates>35.02886509,-15.83292586,0</coordinates></Point></Placemark>
+<Placemark><name>det_3</name><description><![CDATA[id=3, u=676, v=371, dE=2.605m, dN=-9.728m]]></description><Point><coordinates>35.02863186,-15.83306609,0</coordinates></Point></Placemark>
+<Placemark><name>det_4</name><description><![CDATA[id=4, u=481, v=262, dE=12.737m, dN=11.911m]]></description><Point><coordinates>35.02872646,-15.83287170,0</coordinates></Point></Placemark>
+<Placemark><name>det_5</name><description><![CDATA[id=5, u=391, v=128, dE=34.163m, dN=36.788m]]></description><Point><coordinates>35.02892653,-15.83264824,0</coordinates></Point></Placemark>
+<Placemark><name>det_6</name><description><![CDATA[id=6, u=223, v=219, dE=9.060m, dN=40.585m]]></description><Point><coordinates>35.02869213,-15.83261412,0</coordinates></Point></Placemark>
+<Placemark><name>det_7</name><description><![CDATA[id=7, u=245, v=66, dE=39.974m, dN=67.164m]]></description><Point><coordinates>35.02898079,-15.83237537,0</coordinates></Point></Placemark>
+</Document></kml>
