@@ -1,84 +1,50 @@
 # yolo-detection-to-gps-coordinates
 A drone-based computer vision framework that projects YOLO detections from angled images onto GPS coordinates, enhancing situational awareness by leveraging camera intrinsics and extrinsics extracted from EXIF metadata.
+sections.  
 # Drone Vision for Georeferenced Object Detection
 
-## Drone Vision for Georeferenced Object Detection
-
-### 1. Motivation & Problem Context
-Modern disaster response and geospatial applications require rapid, reliable identification of features on the ground — whether collapsed buildings after earthquakes, flooded zones after storms, or damaged infrastructure during conflict. Drones are uniquely suited for this task because they can capture oblique (angled) imagery at scale.  
-
-However, raw object detections (bounding boxes) from neural networks like **YOLO** only exist in **pixel space**. To be useful for responders, these detections must be translated into **real-world georeferenced coordinates (latitude/longitude)**.  
-
-This toolkit bridges the gap by integrating:
-- **Computer vision (YOLO)** for real-time object detection.  
-- **Camera geometry** from intrinsics (sensor size, focal length, pixel pitch) and extrinsics (gimbal tilt, yaw, altitude).  
-- **Photogrammetry principles** to project detections from the image plane onto the Earth’s surface.  
-- **EXIF/XMP metadata** embedded in drone imagery, which provides camera and GPS information.  
+## Motivation & Context  
+Disaster response demands **georeferenced situational awareness**, not just bounding boxes. While YOLO provides real-time damage detection, outputs remain in **pixel space**. This framework bridges the gap, projecting detections onto **GPS coordinates** using camera intrinsics, extrinsics, and EXIF/XMP metadata.  
 
 ---
 
-### 2. Pipeline Overview
+## Pipeline Overview  
+1. **Metadata Extraction** – Intrinsics (focal length, pixel pitch) + extrinsics (tilt, yaw, altitude) from EXIF/XMP.  
+2. **FOV Computation** – Horizontal/Vertical FOV define angular coverage.  
+3. **YOLO Detection** – Custom-trained model detects damaged structures.
 
-1. **Metadata Extraction (EXIF/XMP)**  
-   - Extracts focal length, pixel pitch, sensor size, GPS, altitude, gimbal pitch, and yaw.  
-   - Falls back to known specs if missing.  
+   ![Raw Detections](./Img1.jpg)
+   
+4. **Pixel → Angles** – Convert detection centers to angular offsets:
 
-2. **Field of View (FOV) Calculation**  
-   - Computes Horizontal, Vertical, and Diagonal FOV.  
-   - Defines angular extent of the camera’s view.  
+ ![Pixel Coordinates](./Img2.jpg)
+   
+5. **Ground Projection** – Tilt + altitude intersect detection rays with the ground plane.
+   
+![Pixel to Angle Mapping](./Img3.jpg)  
 
-3. **YOLO Detection**  
-   - Custom-trained YOLO detects objects of interest (e.g., damaged buildings).  
-   - Bounding boxes and confidences extracted.  
+6. **Georeferencing** – Rotate offsets via yaw → ENU → GPS coordinates.  
+7. **Export** – CSV for tabular analysis, KML for Google Earth visualization.
 
-4. **Image → Angle Mapping**  
-   - Each detection center `(u, v)` → angular offsets `(θx, θy)` relative to the optical axis:  
-     ```
-     θx = arctan((u - cx) / fx)
-     θy = arctan((v - cy) / fy)
-     ```
-
-5. **Projection onto Ground Plane**  
-   - Combines tilt + altitude to intersect detections with ground plane:  
-     ```
-     r = H / tan(δ)
-     ```
-   - Produces forward and lateral offsets from nadir.  
-
-6. **Georeferencing**  
-   - Offsets rotated into Earth’s **ENU frame** using yaw.  
-   - Converted into GPS shifts (lat/lon).  
-
-7. **Export & Visualization**  
-   - **CSV** → tabular output of detections with GPS.  
-   - **KML** → visualization in Google Earth/Maps.  
-   - Overlayed images show detections, rulers, and angular annotations.  
-
+![kml_visualization](./Img4.png)  
 ---
 
-### 3. The Science Behind It
-
+## Scientific Basis  
 - **Computer Vision (YOLO):** CNNs transform pixels into semantic detections.  
 - **Camera Geometry:** Pinhole camera model with intrinsics/extrinsics.  
 - **Projection Trigonometry:** Pixels → angles → ground intersections.  
 - **Geodesy & GIS:** ENU offsets transformed into geographic coordinates.  
-- **Remote Sensing:** EXIF altitude and SRTM ground models provide terrain-aware correction.  
-
----
-
-### 4. Example Workflow (Conceptual)
-
-- DJI drone captures an oblique disaster image.  
-- **EXIF:** FocalLength = 10.26 mm, PixelPitch = 2.41 µm, GimbalPitch = -48.8°, Yaw = 135°, GPS = (lat, lon).  
-- **YOLO:** Detects collapsed building at `(u=540, v=320)`.  
-- **Intrinsics:** Converts pixel → angles `(θx, θy)`.  
-- **Projection:** Angles + altitude → 85 m forward, 12 m right.  
-- **Georeferencing:** Rotated via yaw → GPS coordinates.  
-- **Outputs:** CSV + KML ready for Google Earth visualization.  
-
----
-
-## :rocket: News
-- [2025-09-01] Initial release of oblique vision georeferencing toolkit.  
+- **Remote Sensing:** EXIF altitude and SRTM ground models provide terrain-aware correction.
 
 
+## Future Development  
+This framework establishes the foundation for **pixel-to-GPS georeferencing of drone detections**, but several critical extensions remain for real-world impact:  
+
+- **Real-Time Integration** – Evolve from offline inference to a streaming pipeline where detections are instantly georeferenced and relayed to an **Emergency Command Centre**, minimizing delays in field deployment.  
+- **Swarm Drone Coordination** – Extend to multi-UAV systems where fleets of drones collaboratively map affected zones. Coordinated coverage reduces blind spots, while redundant detections improve confidence.  
+- **Edge + Cloud Fusion** – Onboard inference at the edge (drone GPUs) combined with centralized fusion servers would allow both speed and global situational awareness.  
+- **Human-in-the-Loop Validation** – Build interfaces where responders can **validate or dismiss detections in real-time**, increasing reliability for life-critical decisions.  
+- **Dynamic Terrain Awareness** – Integrate near real-time elevation models (LiDAR, satellite feeds) to improve accuracy over rugged terrain where SRTM may lag.  
+- **Scalability & Interoperability** – Develop APIs that seamlessly connect this toolkit with existing GIS platforms, disaster dashboards, and humanitarian coordination systems (e.g., UN OCHA, Red Cross).  
+
+The long-term vision is a **fully autonomous, multi-drone situational awareness system** where object detections become georeferenced intelligence within seconds, **saving lives by directing responders to the right place at the right time**. 
